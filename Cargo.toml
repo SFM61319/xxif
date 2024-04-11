@@ -28,3 +28,4 @@ clap = { version = "4.5.4", features = [
     "wrap_help",
     "string",
 ] }
+rayon = "1.10.0"

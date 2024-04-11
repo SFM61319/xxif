@@ -20,8 +20,8 @@ pub struct Args {
 
 impl Args {
     /// The default directory path.
-    const DEFAULT_DIRECTORY_PATH: &'static str = constants::CURRENT_DIRECTORY_PATH;
+    pub const DEFAULT_DIRECTORY_PATH: &'static str = constants::CURRENT_DIRECTORY_PATH;
 
     /// The default number of cores.
-    const DEFAULT_CORES: usize = usize::MIN;
+    pub const DEFAULT_CORES: usize = usize::MIN;
 }
