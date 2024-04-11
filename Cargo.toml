@@ -28,4 +28,5 @@ clap = { version = "4.5.4", features = [
     "wrap_help",
     "string",
 ] }
+num_cpus = "1.16.0"
 rayon = "1.10.0"
