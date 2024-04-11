@@ -31,3 +31,4 @@ clap = { version = "4.5.4", features = [
 rayon = "1.10.0"
 tracing = "0.1.40"
 walkdir = "2.5.0"
+xxhash-rust = { version = "0.8.10", features = ["xxh3", "const_xxh3"] }
