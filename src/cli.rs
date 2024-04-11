@@ -2,7 +2,7 @@
 
 use clap::Parser;
 
-use crate::constants;
+use xxif::constants;
 
 #[derive(Clone, Debug, Default, Hash, PartialEq, Eq, PartialOrd, Ord, Parser)]
 #[command(name = constants::APP_NAME, version = constants::APP_VERSION, author = constants::APP_AUTHOR, about = constants::APP_DESCRIPTION)]
@@ -16,6 +16,10 @@ pub struct Args {
     /// Set to `0` to use all cores.
     #[arg(short, long, default_value_t = Self::DEFAULT_CORES)]
     pub cores: usize,
+
+    /// Enable verbose mode.
+    #[arg(short, long)]
+    pub verbose: bool,
 }
 
 impl Args {
