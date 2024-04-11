@@ -31,3 +31,4 @@ clap = { version = "4.5.4", features = [
 num_cpus = "1.16.0"
 rayon = "1.10.0"
 tracing = "0.1.40"
+walkdir = "2.5.0"
