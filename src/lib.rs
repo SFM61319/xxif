@@ -48,10 +48,10 @@ fn set_image_uid(path: &Path, image_uid: String) -> IoResult<()> {
     tracing::debug!(image = ?path, uid = ?image_uid, "Setting image UID EXIF");
 
     let image_uid = ExifTag::ImageUniqueID(image_uid);
-    let mut metadata = Metadata::new_from_path(&path)?;
+    let mut metadata = Metadata::new_from_path(path)?;
 
     metadata.set_tag(image_uid);
-    metadata.write_to_file(&path)?;
+    metadata.write_to_file(path)?;
 
     tracing::debug!(image = ?path, "Set image UID EXIF");
     Ok(())
