@@ -14,7 +14,7 @@ use xxhash_rust::xxh3::xxh3_128;
 
 pub mod constants;
 
-/// Returns `true` if `extension` is an acceptable image extension.
+/// Returns `true` if `extension` is an [acceptable image extension](constants::ACCEPTABLE_IMAGE_EXTENSIONS).
 #[inline]
 fn is_acceptable(extension: &str) -> bool {
     constants::ACCEPTABLE_IMAGE_EXTENSIONS
@@ -32,7 +32,7 @@ fn is_image(entry: &DirEntry) -> bool {
         .map_or(false, is_acceptable)
 }
 
-/// Hashes the image at `path` using `XXH3-128` and returns it.
+/// Hashes the image at `path` using [`XXH3-128`](xxh3_128) and returns it.
 fn hash_image(path: &Path) -> IoResult<u128> {
     tracing::debug!(image = ?path, "Hashing image");
 
@@ -43,8 +43,7 @@ fn hash_image(path: &Path) -> IoResult<u128> {
     Ok(hash_value)
 }
 
-/// Processes the image at `path` and returns it.
-#[tracing::instrument(level = tracing::Level::DEBUG)]
+/// Sets the hash of image at `path` in the image's EXIF data.
 fn process_image(path: PathBuf) -> IoResult<()> {
     tracing::debug!(image = ?path, "Processing image");
 
@@ -61,8 +60,8 @@ fn process_image(path: PathBuf) -> IoResult<()> {
     Ok(())
 }
 
-/// Processes all images in `path` recursively.
-/// Returns the number of successfully processed images.
+/// Sets the hashes of all images in `path` in the images' EXIF data recursively
+/// and returns the number of successfully processed images.
 #[inline]
 fn process_all_images<P>(path: P) -> usize
 where
@@ -80,8 +79,8 @@ where
         .count()
 }
 
-/// Processes all images in `path` in parallel using `cores` threads.
-/// Returns the number of successfully processed images.
+/// Sets the hashes of all images in `path` in the images' EXIF data recursively
+/// in parallel using `core` threads and returns the number of successfully processed images.
 #[inline]
 pub fn process_images<P>(path: P, cores: usize) -> usize
 where

@@ -1,4 +1,4 @@
-//! Main entrypoint.
+//! A program to generate image hashes and add them to the images' EXIF data.
 
 use clap::Parser;
 
@@ -6,6 +6,7 @@ use xxif;
 
 mod cli;
 
+/// The main entrypoint function.
 pub fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = cli::Args::parse();
 
