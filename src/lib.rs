@@ -43,20 +43,30 @@ fn hash_image(path: &Path) -> IoResult<u128> {
     Ok(hash_value)
 }
 
+/// Sets `image_uid` as the image unique ID EXIF tag for the image at `path`.
+fn set_image_uid(path: &Path, image_uid: String) -> IoResult<()> {
+    tracing::debug!(image = ?path, uid = ?image_uid, "Setting image UID EXIF");
+
+    let image_uid = ExifTag::ImageUniqueID(image_uid);
+    let mut metadata = Metadata::new_from_path(&path)?;
+
+    metadata.set_tag(image_uid);
+    metadata.write_to_file(&path)?;
+
+    tracing::debug!(image = ?path, "Set image UID EXIF");
+    Ok(())
+}
+
 /// Sets the hash of image at `path` in the image's EXIF data.
 fn process_image(path: PathBuf) -> IoResult<()> {
     tracing::debug!(image = ?path, "Processing image");
 
     let hash_value = hash_image(&path)?;
-    let mut metadata = Metadata::new_from_path(&path)?;
-
     let image_uid = Uuid::from_u128(hash_value).hyphenated().to_string();
-    let image_uid = ExifTag::ImageUniqueID(image_uid);
 
-    metadata.set_tag(image_uid);
-    metadata.write_to_file(&path)?;
-
+    set_image_uid(&path, image_uid)?;
     tracing::info!(image = ?path, "Processed image");
+
     Ok(())
 }
 
@@ -75,6 +85,7 @@ where
         .map(DirEntry::into_path)
         .par_bridge()
         .map(process_image)
+        .map(|out| out.inspect_err(|err| tracing::error!(error = ?err, "Failed to process image")))
         .filter_map(Result::ok)
         .count()
 }
