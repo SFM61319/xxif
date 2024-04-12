@@ -15,5 +15,5 @@ pub const APP_DESCRIPTION: &'static str = env!("CARGO_PKG_DESCRIPTION");
 /// The current directory path.
 pub const CURRENT_DIRECTORY_PATH: &'static str = ".";
 
-/// The searched image extension.
-pub const IMAGE_EXTENSION: &'static str = "jpg";
+/// The acceptable image extensions.
+pub const ACCEPTABLE_IMAGE_EXTENSIONS: [&'static str; 2] = ["jpg", "jpeg"];
