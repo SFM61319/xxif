@@ -10,14 +10,6 @@ _A Rust program to generate image hashes and add them to the images' EXIF data._
 cargo install --git https://github.com/SFM61319/xxif
 ```
 
-2. Using `cargo` from ([crates.io](https://crates.io/)):
-
-```sh
-cargo install xxif
-```
-
-3. From [GitHub Releases](https://github.com/SFM61319/xxif/releases/tag/latest):
-
 ## Usage
 
 _Run this command for the complete help text._
