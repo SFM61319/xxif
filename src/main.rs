@@ -2,8 +2,6 @@
 
 use clap::Parser;
 
-use xxif;
-
 mod cli;
 
 /// The main entrypoint function.
@@ -14,9 +12,11 @@ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cores = args.num_cores;
 
     let verbose = args.verbose;
-    let verbosity = verbose
-        .then_some(tracing::Level::TRACE)
-        .unwrap_or(tracing::Level::INFO);
+    let verbosity = if verbose {
+        tracing::Level::TRACE
+    } else {
+        tracing::Level::INFO
+    };
 
     tracing_subscriber::fmt()
         .pretty()
