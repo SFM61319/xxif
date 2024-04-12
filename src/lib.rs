@@ -48,7 +48,7 @@ fn process_image(path: PathBuf) -> IoResult<()> {
     tracing::debug!(image = ?path, "Processing image");
 
     let hash_value = hash_image(&path)?;
-    let mut metadata = Metadata::new();
+    let mut metadata = Metadata::new_from_path(&path)?;
 
     let image_uid = Uuid::from_u128(hash_value).hyphenated().to_string();
     let image_uid = ExifTag::ImageUniqueID(image_uid);
