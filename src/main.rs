@@ -24,16 +24,8 @@ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_line_number(false)
         .init();
 
-    if cores == cli::Args::DEFAULT_CORES {
-        tracing::info!("Processing images in `{}` using all cores", directory);
-    } else {
-        tracing::info!(
-            "Processing images in `{}` using `{}` cores",
-            directory,
-            cores
-        );
-    }
+    let successful_count = xxif::process_images(directory, cores);
+    tracing::info!("Successfully processed {} images", successful_count);
 
-    xxif::process_images(directory, cores);
     Ok(())
 }
