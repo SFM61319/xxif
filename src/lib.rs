@@ -57,14 +57,14 @@ fn process_image(path: PathBuf) -> IoResult<()> {
     Ok(())
 }
 
-/// Processes all images in `directory` recursively.
+/// Processes all images in `path` recursively.
 /// Returns the number of successfully processed images.
 #[inline]
-fn process_all_images<P>(directory: P) -> usize
+fn process_all_images<P>(path: P) -> usize
 where
     P: AsRef<Path>,
 {
-    WalkDir::new(directory)
+    WalkDir::new(path)
         .into_iter()
         .filter_map(Result::ok)
         .filter(|entry| entry.file_type().is_file() && is_image(entry))
@@ -75,16 +75,16 @@ where
         .count()
 }
 
-/// Processes all images in `directory` in parallel using `cores` threads.
+/// Processes all images in `path` in parallel using `cores` threads.
 /// Returns the number of successfully processed images.
 #[inline]
-pub fn process_images<P>(directory: P, cores: usize) -> usize
+pub fn process_images<P>(path: P, cores: usize) -> usize
 where
     P: AsRef<Path> + Send,
 {
     ThreadPoolBuilder::new()
         .num_threads(cores)
         .build()
-        .map(|pool| pool.install(|| process_all_images(directory)))
+        .map(|pool| pool.install(|| process_all_images(path)))
         .unwrap_or_default()
 }
