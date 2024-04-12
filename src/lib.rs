@@ -34,16 +34,20 @@ fn is_image(entry: &DirEntry) -> bool {
 
 /// Hashes the image at `path` using `XXH3-128` and returns it.
 fn hash_image(path: &Path) -> IoResult<u128> {
+    tracing::debug!(image = ?path, "Hashing image");
+
     let bytes = read(path)?;
     let hash_value = xxh3_128(&bytes);
 
-    tracing::debug!(hash = ?hash_value, "Hashed image");
+    tracing::debug!(image = ?path, hash = ?hash_value, "Hashed image");
     Ok(hash_value)
 }
 
 /// Processes the image at `path` and returns it.
 #[tracing::instrument(level = tracing::Level::DEBUG)]
 fn process_image(path: PathBuf) -> IoResult<()> {
+    tracing::debug!(image = ?path, "Processing image");
+
     let hash_value = hash_image(&path)?;
     let mut metadata = Metadata::new();
 
@@ -66,6 +70,7 @@ where
 {
     WalkDir::new(path)
         .into_iter()
+        .map(|entry| entry.inspect_err(|err| tracing::warn!(error = ?err, "Failed to walk path")))
         .filter_map(Result::ok)
         .filter(|entry| entry.file_type().is_file() && is_image(entry))
         .map(DirEntry::into_path)
@@ -85,6 +90,7 @@ where
     ThreadPoolBuilder::new()
         .num_threads(cores)
         .build()
+        .inspect_err(|err| tracing::error!(error = ?err, "Failed to build thread pool"))
         .map(|pool| pool.install(|| process_all_images(path)))
         .unwrap_or_default()
 }

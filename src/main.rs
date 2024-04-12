@@ -24,8 +24,11 @@ pub fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_line_number(false)
         .init();
 
-    let successful_count = xxif::process_images(path, cores);
-    tracing::info!("Successfully processed {} images", successful_count);
+    tracing::debug!(path = ?path, cores = ?cores, "Recursively processing images");
+    match xxif::process_images(path, cores) {
+        usize::MIN => tracing::error!("No images processed"),
+        count => tracing::info!(processed = ?count, "Successfully processed images"),
+    }
 
     Ok(())
 }
